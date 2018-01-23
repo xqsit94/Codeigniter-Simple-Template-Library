@@ -25,6 +25,15 @@ class Template
 
 	// Layout Selector
 	private $layout;
+	
+	//parts of layout
+	private $_parts = array();
+
+	//main content of layout
+	private $_content;
+
+	//text on page
+	private $_props = array();
 
 	// Default Theme Selector
 	private $default_theme = 'default';
@@ -220,6 +229,24 @@ class Template
 	{
 		$data['theme']['assets'] = $this->asset;
 		$this->ci->load->view($this->layout, $data);
+	}
+	
+	public function set_content($view, $data = array()) {
+		$this->_content = $this->ci->load->view($view, $data, TRUE);
+	}
+
+	public function set_part($name, $view, $data= array()) {
+		$parts = $this->_parts;
+		$data['theme']['assets'] = $this->asset;
+		$data['props'] = $this->_props;
+		$parts[$name] = $this->ci->load->view($view, $data, TRUE);
+		$this->_parts = $parts;		
+	}
+
+	public function set_props($name, $value) {
+		$props = $this->_props;
+		$props[$name] = $value;
+		$this->_props = $props;		
 	}
 
 
